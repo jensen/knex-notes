@@ -1,0 +1,9 @@
+<header>
+  <form method="POST" action="/login">
+    <% users.forEach((user) => { %>
+    <button name="userid" value="<%= user.id %>">
+      <%= user.email %>
+    </button>
+    <% }); %>
+  </form>
+</header>

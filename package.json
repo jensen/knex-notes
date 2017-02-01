@@ -1,0 +1,22 @@
+{
+  "name": "sql-notes",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js",
+    "knex": "./node_modules/.bin/knex"
+  },
+  "author": "Karl Jensen",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.16.0",
+    "cookie-parser": "^1.4.3",
+    "ejs": "^2.5.5",
+    "express": "^4.14.1",
+    "knex": "^0.12.6",
+    "pg": "^6.1.2",
+    "shortid": "^2.2.6"
+  }
+}

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <% include partials/_head %>
+  <body>
+    <div class="container">
+      <form method="POST" action="/urls/<%= short %>/edit/">
+        <input type="text" name="long" value="<%= long %>" /><br />
+      </form>
+      <form method="POST" action="/urls/<%= short %>/delete/">
+        <button>Delete</button>
+      </form>
+      <p><a href="/urls">Back</a></p>
+    </div>
+  </body>
+</html>

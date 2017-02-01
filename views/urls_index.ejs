@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+  <% include partials/_head %>
+  <body>
+    <% include partials/_header %>
+    <div class="container">
+    <% urls.forEach(url => { %>
+    <p><a href="<%= url.long %>"><%= url.long %></a>&nbsp;<a href="/urls/<%= url.short %>/">Edit</a></p>
+    <% }); %>
+    <form method="POST" action="/urls">
+      <input type="text" name="long" />
+    </form>
+    </div>
+  </body>
+</html>
