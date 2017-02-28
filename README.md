@@ -6,7 +6,7 @@ I've added a copy of these notes and the slides to [knex-notes](https://github.c
 
 The [knex documentation](http://knexjs.org/) is the most useful resource, as it should continue to be updated as the library continues to grow.
 
-## Why not just user string queries?
+## Why not just use string queries?
 
 * Implementation lock in.
 * No migrations.
@@ -54,10 +54,6 @@ SQL Injections can be the result of unsantized user input making it's way into S
 
 ## Knex Demo
 
-Using sqlite we able to see the contents of our database and started to convert TinyApp to use knex instead of an object to store user and url data.
-
-If we were to convert all of the TinyApp routes to use SQL queries instead then they would look something like this:
-
 ### Database Connection
 
 There are a few ways that `knex` describes configuration. Similar to `pg` you can use a config object with the information.
@@ -90,6 +86,8 @@ const knex = require('knex')({
 ```
 PG_CONNECTION_STRING=postgres://kjensen:@localhost:5432/w4d2
 ```
+
+If we were to convert all of the TinyApp routes to use SQL queries instead then they would look something like this:
 
 ### GET /login
 
@@ -160,7 +158,6 @@ knex.select().from("users").then((results) => {
 });
 ```
 
-
 ### Migrations
 
 Before we create any migrations we need to initialize our `knexfile.js` configuration file. We can do this by running the knex command line tool `knex init`. You can configure it for the different environments you may have. The default `knexfile.js` has a development, staging and production configuration. In this exercise we will only use a development config.
@@ -185,7 +182,7 @@ In order to setup migrations we need to need to run the `knex migrate:make <name
 
 We can call `knex --env production migrate:latest` if we want to specify which environment (from our knexfile) to use when applying the latest migrtion.
 
-There were about four stages in TinyApp where the database structure had to change. Here are the four migrations that correspond.
+There were about four stages in TinyApp where the database schema had to change. Here are the four migrations that correspond.
 
 Create urls table with id, short and long url.
 
