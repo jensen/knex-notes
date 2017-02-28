@@ -163,7 +163,7 @@ knex.select().from("users").then((results) => {
 
 ### Migrations
 
-In order to setup migrations we need to `knex migrate:make <name>`. A new knexfile.js should be created. We can edit this to point to our db.
+Before we create any migrations we need to initialize our `knexfile.js` configuration file. We can do this by running the knex command line tool `knex init`. You can configure it for the different environments you may have. The default `knexfile.js` has a development, staging and production configuration. In this exercise we will only use a development config.
 
 ```javascript
 module.exports = {
@@ -181,7 +181,9 @@ module.exports = {
 };
 ```
 
-Remember that we can call `knex --env production migrate:latest` if we want to specify which environment to use.
+In order to setup migrations we need to need to run the `knex migrate:make <name>` command.
+
+We can call `knex --env production migrate:latest` if we want to specify which environment (from our knexfile) to use when applying the latest migrtion.
 
 There were about four stages in TinyApp where the database structure had to change. Here are the four migrations that correspond.
 
@@ -211,7 +213,7 @@ exports.up = function(knex) {
   return knex.schema.createTable("users", (table) => {
     table.increments();
     table.string("username");
-  }) 
+  })
 };
 exports.down = function(knex) {
   return knex.schema.dropTable("users");
