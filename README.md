@@ -1,10 +1,10 @@
 # knex
 
+Slides and notes can be found at [https://github.com/jensen/knex-notes/](https://github.com/jensen/knex-notes/).
+
 Vaz has provided an incredible [knex-demo](https://github.com/vaz/knex-demo/) with his notes from a previous cohort.
 
-I've added a copy of these notes and the slides to [knex-notes](https://github.com/jensen/knex-notes/).
-
-The [knex documentation](http://knexjs.org/) is the most useful resource, as it should continue to be updated as the library continues to grow.
+The [knex documentation](http://knexjs.org/) is a useful resource, as it should continue to be updated as the library continues to grow.
 
 ## Why not just use string queries?
 
@@ -63,8 +63,6 @@ var knex = require('knex')({
   client: 'pg',
   connection: {
     host : 'localhost',
-    user : 'kjensen',
-    password : '',
     database : 'w4d2'
   }
 });
@@ -167,9 +165,7 @@ module.exports = {
   development: {
     client: 'postgresql',
     connection: {
-      database: 'w4d2',
-      user:     'kjensen',
-      password: ''
+      database: 'w4d2'
     },
     migrations: {
       tableName: 'knex_migrations'
@@ -245,6 +241,7 @@ Add user_id to urls table so that users can have many urls.
 exports.up = function(knex) {
   return knex.schema.table("urls", (table) => {
     table.integer("user_id").unsigned();
+    table.foreign('user_id').references('users.id').onDelete('CASCADE');
   });
 };
 exports.down = function(knex) {
@@ -273,37 +270,49 @@ In order for this to work, Developer A would have had to instruct Developer B to
 
 ## Seeds
 
-When you run `knex seed:make <name>` you will create a template file in the seeds directory.
+When you run `knex seed:make <name>` you will create a template file in the seeds directory. I for most projects I tend to create a single `seeds.js` file. This way I can easily control the order in which the entries are added to the database.
 
-**users.js**
+> `knex seed:make seeds` would produce a file with a basic template. I prefer the approach that I've provided example source code for.
+
+**seeds.js**
 
 ```javascript
+const users = [
+  { id: 1, email: 'first@user.com', password: '123456' },
+  { id: 2, email: 'second@user.com', password: '123456' }
+];
+
+const urls = [
+  { id: 1, short: 'abc', long: 'http://www.google.com/', user_id: 1} ,
+  { id: 2, short: 'def', long: 'http://www.duckduckgo.com/', user_id: 1 },
+  { id: 3, short: 'ghi', long: 'http://www.bing.com/', user_id: 2 },
+  { id: 4, short: 'jkl', long: 'http://www.yahoo.com/', user_id: 2 },
+  { id: 5, short: 'mno', long: 'http://www.ask.com/', user_id: 2 }
+];
+
 exports.seed = function(knex, Promise) {
-  return knex('users').del()
-    .then(function () {
-      return Promise.all([
-        knex('users').insert({id: 1, email: 'first@user.com', password: '123456'}),
-        knex('users').insert({id: 2, email: 'second@user.com', password: '123456'})
-      ]);
-    });
+  /* Helper function to seed tables, defined inside of the seed function
+     to get access to 'knex'. Closure. */
+  const seedTable = (table, data) => {
+    /* Need to make sure that our primary key starts after the seeded entries. */
+    return knex.raw(`ALTER SEQUENCE ${table}_id_seq RESTART WITH ${data.length + 1}`)
+      .then(() => {
+        /* Removes all of the current entries for that table. */
+        return knex(table).del().then(() => {
+      })
+      .then(() => {
+        /* Insert rows as an array. */
+        return knex(table).insert(data);
+      })
+    })
+
+  };
+
+  return seedTable('users', users).then(() => {
+    return seedTable('urls', urls);
+  });
 };
-```
 
-**urls.js**
-
-```javascript
-exports.seed = function(knex, Promise) {
-  return knex('urls').del()
-    .then(function () {
-      return Promise.all([
-        knex('urls').insert({id: 1, short: 'abc', long: 'http://www.google.com/', user_id: 1}),
-        knex('urls').insert({id: 2, short: 'def', long: 'http://www.duckduckgo.com/', user_id: 1}),
-        knex('urls').insert({id: 3, short: 'ghi', long: 'http://www.bing.com/', user_id: 2}),
-        knex('urls').insert({id: 4, short: 'jkl', long: 'http://www.yahoo.com/', user_id: 2}),
-        knex('urls').insert({id: 5, short: 'mno', long: 'http://www.ask.com/', user_id: 2})
-      ]);
-    });
-}
 ```
 
 In order to seed the database you would run `knex seed:run`.
