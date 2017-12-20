@@ -35,7 +35,7 @@ Say we wanted to create the urls table for TinyApp.
 
 ```javascript
 exports.up = function (knex) {
-  return knex.schema.createTable("urls", (table) => {
+  return knex.schema.createTable('urls', (table) => {
     table.increments();
     table.string(‘short’);
     table.string(‘long’);
@@ -91,42 +91,42 @@ If we were to convert all of the TinyApp routes to use SQL queries instead then 
 
 ```javascript
 select * from users;
-knex.select().from("users");
+knex.select().from('users');
 ```
 
 ### GET /urls
 
 ```javascript
 select short, long from urls user_id = 1;
-knex.select().from("urls").where({ user_id: 1});
+knex.select().from('urls').where({ user_id: 1});
 ```
 
 ### POST /urls
 
 ```javascript
-insert into urls ("short", "long", "user_id") values ("abc", "http://www.lighthouselabs.ca/", 1);
-knex.insert({ short: "abc", long: "http://www.lighthouselabs.ca/", user_id: 1 }).into("urls");
+insert into urls ('short', 'long', 'user_id') values ('abc', 'http://www.lighthouselabs.ca/', 1);
+knex.insert({ short: 'abc', long: 'http://www.lighthouselabs.ca/', user_id: 1 }).into('urls');
 ```
 
 ### GET /urls/:short
 
 ```javascript
-select short, long from urls where short = "abc";
-knex.select("short", "long").from("urls").where({ short: "abc" });
+select short, long from urls where short = 'abc';
+knex.select('short', 'long').from('urls').where({ short: 'abc' });
 ```
 
 ### POST /urls/:short/edit
 
 ```javascript
-update urls set long="http://www.lighthouselabs.ca/" where short = "abc";
-knex("urls").where({ short: "abc" }).update({ long: "http://www.lighthouselabs.ca/" });
+update urls set long='http://www.lighthouselabs.ca/' where short = 'abc';
+knex('urls').where({ short: 'abc' }).update({ long: 'http://www.lighthouselabs.ca/' });
 ```
 
 ### POST /urls/:short/delete
 
 ```javascript
-delete from urls where short = "abc";
-knex("urls").where({ short: "abc" }).del();
+delete from urls where short = 'abc';
+knex('urls').where({ short: 'abc' }).del();
 ```
 
 ### Getting the results
@@ -136,7 +136,7 @@ Above were all calls that could generate queries, but none of them actually made
 **As a callback**
 
 ```javascript
-knex.select().from("users").asCallback((error, results) => {
+knex.select().from('users').asCallback((error, results) => {
   // handle error
   results.forEach((result) => {
     console.log(result.email);
@@ -147,7 +147,7 @@ knex.select().from("users").asCallback((error, results) => {
 **As a Promise**
 
 ```javascript
-knex.select().from("users").then((results) => {
+knex.select().from('users').then((results) => {
   results.forEach((result) => {
     console.log(result.email);
   });
@@ -186,14 +186,14 @@ Create urls table with id, short and long url.
 
 ```javascript
 exports.up = function(knex) {
-  return knex.schema.createTable("urls", (table) => {
+  return knex.schema.createTable('urls', (table) => {
     table.increments();
-    table.string("short");
-    table.string("long");
+    table.string('short');
+    table.string('long');
   });
 };
 exports.down = function(knex) {
-  return knex.schema.dropTable("urls");
+  return knex.schema.dropTable('urls');
 }
 ```
 
@@ -203,13 +203,13 @@ Create users table with id and username.
 
 ```javascript
 exports.up = function(knex) {
-  return knex.schema.createTable("users", (table) => {
+  return knex.schema.createTable('users', (table) => {
     table.increments();
-    table.string("username");
+    table.string('username');
   })
 };
 exports.down = function(knex) {
-  return knex.schema.dropTable("users");
+  return knex.schema.dropTable('users');
 };
 ```
 
@@ -219,16 +219,16 @@ Add email and password, but remove the username for users.
 
 ```javascript
 exports.up = function(knex) {
-  return knex.schema.table("users", (table) => {
-    table.dropColumn("username");
-    table.string("email");
-    table.string("password");
+  return knex.schema.table('users', (table) => {
+    table.dropColumn('username');
+    table.string('email');
+    table.string('password');
   });
 };
 exports.down = function(knex) {
-  return knex.schema.table("users", (table) => {
-    table.dropColumns("email", "password");
-    table.string("username");
+  return knex.schema.table('users', (table) => {
+    table.dropColumns('email', 'password');
+    table.string('username');
   });
 };
 ```
@@ -239,14 +239,14 @@ Add user_id to urls table so that users can have many urls.
 
 ```javascript
 exports.up = function(knex) {
-  return knex.schema.table("urls", (table) => {
-    table.integer("user_id").unsigned();
-    table.foreign("user_id").references("users.id").onDelete("CASCADE");
+  return knex.schema.table('urls', (table) => {
+    table.integer('user_id').unsigned();
+    table.foreign('user_id').references('users.id').onDelete('CASCADE');
   });
 };
 exports.down = function(knex) {
-  return knex.schema.table("urls", (table) => {
-    table.dropColumn("user_id");
+  return knex.schema.table('urls', (table) => {
+    table.dropColumn('user_id');
   });
 };
 ```

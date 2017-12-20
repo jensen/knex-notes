@@ -1,10 +1,10 @@
 exports.up = function(knex) {
-  return knex.schema.createTable("users", (table) => {
+  return knex.schema.createTable('users', (table) => {
     table.increments();
-    table.string("username");
-  }) 
+    table.string('username');
+  })
 };
 
 exports.down = function(knex) {
-  return knex.schema.dropTable("users");
+  return knex.schema.dropTable('users');
 };
